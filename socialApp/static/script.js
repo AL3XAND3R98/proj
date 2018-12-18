@@ -1,6 +1,4 @@
-$(function() {
-
-    // connecting click on profile image with click on upload file remove_button
+// connecting click on profile image with click on upload file remove_button
     $('#profile-img').click(function() {
         $("#img_file").click();
     });
@@ -155,5 +153,3 @@ $(function() {
         window.location = $(this).data("href");
 
     });
-
-});

@@ -2,5 +2,9 @@ from django.contrib import admin
 
 from .models import UserProfile, Hobby
 
-admin.site.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    fields = ('username','email','password','image','name', 'gender','dob','hobbies')
+
+
+admin.site.register(UserProfile,UserProfileAdmin)
 admin.site.register(Hobby)

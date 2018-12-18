@@ -1,6 +1,18 @@
 {% extends "socialApp/base.html" %}
 
 {% block content %}
+
+{%if registration %}
+
+<p> Thanks for signing up yo! </p>
+{% endif %}
+
+{%if logout %}
+       You have been logged out.
+       <a href="{% url 'login' %}">click here</a> to return back!
+{% endif %}
+
+
 <form method="get" action="/signup/">
     <button type="submit" class="btn btn-success">Signup</button>
 </form>

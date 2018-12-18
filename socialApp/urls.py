@@ -29,7 +29,7 @@ urlpatterns = [
     # logout page
     path('logout/', views.logout, name='logout'),
     # selects the current hobbies
-    #path('hobby/', views.hobby, name='hobby'),
+    path('hobby/', views.hobby, name='hobby'),
     # user profile edit page
     path('profile/', views.profile, name='profile'),
     # the user matches page

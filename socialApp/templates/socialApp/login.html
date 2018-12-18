@@ -1,17 +1,13 @@
 {% extends "socialApp/base.html" %}
 
 {% block content %}
-   <div class='main'>
 
-        <div class="norm login">
 
-        <div class="sub_container_login">
+
             {% if loggedin %}
             <h1 id="Sub_container_title">You are Logged in! </h1> <small><a href="{% url 'logout' %}">Click here</a> to logout!</small>
-        </div>
-            <br>
-		<form >
 
+		<form >
 
             <button  style="width:150px" class="btn btn-success" formaction="{% url 'search' %}"> Search</button>
             <br>
@@ -20,7 +16,7 @@
             <br>
               <p class="logged_p">Access your profile here!</p>
 		</form>
-           </div>
+
              {% else %}
 
             <h1 id="Sub_container_title">Login </h1>
@@ -36,5 +32,5 @@
                </form>
            </form>
             {% endif %}
-   </div>
+
 {% endblock %}

@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
-# Create your models here.
+from datetime import date
+
+
 
 class Hobby(models.Model): #Hobby model to be used in a m2m relationship
 	name = models.CharField(max_length=100)
@@ -8,24 +10,25 @@ class Hobby(models.Model): #Hobby model to be used in a m2m relationship
 		return self.name
 
 class UserProfile(User): #Inherit from User
-	image = models.ImageField(upload_to='profile_images')
+
 	GENDERS = (
-			('Male', 'Male'),
-			('Female', 'Female'),
+			('M', 'Male'),
+			('F', 'Female'),
 		)
-	gender = models.CharField(max_length=6,choices=GENDERS)  #Gender field
-	dateOfBirth = models.DateField() #Date Of Birth
+	gender = models.CharField(max_length=1,choices=GENDERS)
 	name = models.CharField(max_length=130)
-	hobbies = models.ManyToManyField(
-        to=Hobby,
-        symmetrical=False,
-        blank=False
-    )
-	favourites = models.ManyToManyField(
-        to='self',
-        blank=True,
-        symmetrical=False
-    )
+	image = models.ImageField(upload_to='profile_images')
+	dob = models.DateTimeField('Date of Birth')
+	hobbies = models.ManyToManyField(Hobby)
 
 	def __str__(self):
 		return self.username
+
+	def getAge(self):
+		today = date.today()
+		return today.year - self.dob.year - ((today.month, today.day) < (self.dob.month, self.dob.day))
+
+	def getGender(self):
+		for abbr, gender in self.GENDER:
+			if self.gender == abbr:
+				return gender
