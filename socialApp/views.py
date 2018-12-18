@@ -116,8 +116,8 @@ def logout(request, user):  # view for logout/, flushes the session and logs out
 
 # validate all the fields passed in the request
 def validate(request, condition):
-    u = request.POST['uname']
-    f = request.POST['fname']
+    u = request.POST['username']
+    f = request.POST['name']
     e = request.POST['email']
     g = request.POST['gender']
     h = request.POST.getlist('hobby')
@@ -139,9 +139,12 @@ def logout(request, user):
 def profile(request, user):#view that will allow the user to edit his profile
     user1 = UserProfile.objects.filter(username=user)  # QuerySet object
     condition = profile
+    print("hello!")
     if request.POST:
+        print("hello2")
         dict = validate(request, condition)
-        user1.update(first_name=dict[1], email=dict[2], dob=dict[4])  # updates the fullname and email
+        print(dict)
+        user1.update(name=dict[1], email=dict[2], dateOfBirth=dict[4])  # updates the name and email
         user.hobbies.clear()  # clears hobby
         for hobby in dict[3]:  # dict[4] is the list of hobbies
             hob, _ = Hobby.objects.get_or_create(name=hobby)
