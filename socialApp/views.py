@@ -64,7 +64,9 @@ def register(request):
             'hobby': total
         }
         return render(request, 'socialApp/login.html', context)
-    return render(request, 'socialApp/register.html')
+    return render(request, 'socialApp/register.html', {
+                'hobby': total
+            })
 
 def login(request):
     if not ('username' in request.POST and 'password' in request.POST):
@@ -96,7 +98,6 @@ def login(request):
             response.set_cookie('login', now, expires=expires)
             #set a cookie
             return response
-            print("testoing")
         else:
             return render(request,'socialApp/login.html',{
              'error_message': "Incorrect password, please try again."
@@ -116,7 +117,7 @@ def validate(request):
     g = request.POST['gender']
     h = request.POST.getlist('hobby')
     d = request.POST['dob']
-    i = request.FILES.get('image')
+    i = request.FILES.get('image',False)
     p = request.POST['password']
     dict = [u, f, e, h, d, g, i, p]  # creates an array containing all the fields
 
@@ -125,28 +126,28 @@ def validate(request):
 @loggedin
 def logout(request, user):
     request.session.flush()
-    return render(request, 'socialApp/logout.html', {
+    return render(request, 'socialApp/index.html', {
         'logout': "Thanks for logging in! Hope to see you soon :)"
     })
 
 @loggedin
 def profile(request, user):#view that will allow the user to edit his profile
     user1 = UserProfile.objects.filter(username=user)  # QuerySet object
-    print(user1)
     if request.POST:
         dict = validate(request)
-        print(dict)
         user1.update(name=dict[1], email=dict[2], dob=dict[4], gender=dict[5])  # updates the name and
-
-        for hobby in dict[3]:  # dict[4] is the list of hobbies
+        if (request.FILES.get('image')):
+            user.image = request.FILES.get('image',False)
+        if (request.POST['password']):
+            user.set_password(request.POST['password'])
+        user.hobbies.clear()  # clears hobby
+        for hobby in dict[3]:  # dict[3] is the list of hobbies
             hob, _ = Hobby.objects.get_or_create(name=hobby)
             user.hobbies.add(hob)
-        user.hobbies.clear()  # clears hobby
     total = Hobby.objects.all()  # Queryset, all the hobbies
     names = user1[0].hobbies.values_list('name', flat=True)
     names = list(names) ## get all hobies in list format
-    if(request.FILES.get('image')):
-        user.image = request.FILES['image']
+    user.save()
     dict = {
         'loggedin': True,
         'email': user1[0].email,
@@ -179,3 +180,14 @@ def hobby(request, user):
     hobby = user.hobbies.all()
     context = serializers.serialize('json', hobby)
     return JsonResponse(context, safe=False)
+
+@loggedin
+def upload_image(request, user):  # view of uploadimage/, allows user to upload the image on his profile by using ajax
+    user1 = Member.objects.filter(username=user)
+    if 'img_file' in request.FILES:
+        image_file = request.FILES['img_file']
+        user.image = image_file
+        user.save()
+        return HttpResponse(user.image.url)
+    else:
+        raise Http404('Image file not received')

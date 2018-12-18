@@ -1,4 +1,5 @@
-{% extends "SocialApp/base.html" %} {% load static %} {% block content %}
+{% extends "SocialApp/base.html" %}
+ {% block content %}
 
   <!-----------Profile Pic-------->
                <form id='upload_form' method='POST'  enctype='multipart/form-data'>
@@ -40,7 +41,7 @@
                     <input type="date" name="dob" id='dob' class="form-control" max="9999-12-31" value="{{ dob|date:"Y-m-d" }}"  >
 
                       <label class="mail">Email :</label>
-                        <input type="email" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$]"  name="email" id="email" value={{email}} class="form-control">
+                        <input type="email" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$]"  name="email" id="email" value="{{email}}" class="form-control">
 
 
 
@@ -49,7 +50,7 @@
 
                             {% if gender == 'F' %}
 
-                            <input type="radio"  name="gender" id="gender" value="M" >Female</input>
+                            <input type="radio"  name="gender" id="gender" value="M" >Male</input>
                            <input type="radio"  name="gender" id="gender" value="F" checked>Female</input>
                             {%endif%}
 
@@ -70,25 +71,24 @@
                                              {% endfor %}
 
                            </select>
-
-                           <label for="password">Password:</label>
-                           <input type="password" name="password" id="password" class="form-control">
+                     <label for="password">Password:</label>
+                           <input type="password" name="password" id="password" class="form-control" placeholder="Leave blank if you don't want to change passwords" >
                            <div>
                            <label for="profilePicture">Profile Picture:</label>
-                           <input type="file" name="image" id='profilePicture' >
+                           <input type="file" name="image" id='image' >
                            </div>
 
                                  <input type="submit" value="Save Edit" class="btn btn-warning"/>
                                    <a href="{% url 'homepage' %}">
-                                     <button type="button" class="btn btn-primary">Back to homepage</button>
-                  </
-<div>
-                                 <u> Current Selected Hobbies </u>
+                                     <button type="button" class="btn btn-primary">Back to homepage</button> </a>
+                                     <div>
+                                                                      <u> Current Selected Hobbies </u>
 
-                                 {% for hobby in ownuserhobbies %}
-                                   <li>{{hobby}}</li>
-                                 {% endfor %}
-                                 </div>
+                                                                      {% for hobby in ownuserhobbies %}
+                                                                        <li>{{hobby}}</li>
+                                                                      {% endfor %}
+                                                                      </div>
+
         </form>
 
 
