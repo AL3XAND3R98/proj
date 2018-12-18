@@ -1,0 +1,16 @@
+{% extends "socialApp/base.html" %}
+{% block content %}
+<html>
+<h1 id="Sub_container_title">You are Logged in! </h1> <small><a href="{% url 'logout' %}">Click here</a> to logout!</small>
+
+<form >
+
+<button  style="width:150px" class="btn btn-success" formaction="{% url 'search' %}"> Search</button>
+<br>
+<p class="logged_p">Search for people here!</p>
+<button  style="width:150px" class="btn btn-success" formaction="{% url 'profile' %}"> Profile</button>
+<br>
+  <p class="logged_p">Access your profile here!</p>
+</form>
+</html>
+{% endblock %}

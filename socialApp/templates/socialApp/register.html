@@ -5,11 +5,6 @@
 
 <head>
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 </head>
 <body>
   {% if error_message %}
@@ -37,12 +32,11 @@
                      <label class="age" >Date of Birth :</label>
 
 
-                               <input type="date" name="dob" id='dob' class="form-control">
+                               <input type="date" name="dob" id='dob' class="form-control" max="9999-12-31">
 
             <!-----For email---->
 
                      <label class="mail" >Email :</label>
-  >
                      <input type="email" name="email" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$]" title="Please enter a valid email address."id="email"placeholder="Enter your email" class="form-control" required >
 
                <!-----For Password---->
@@ -64,31 +58,29 @@
                            <input type="radio"  name="gender" id="gender" value="F" >Female</input>
 
                             <!----------- For Hobby-------->
+                             <label class="hobby">Hobbies:</label>
+                            <select name ="hobby" class="selectpicker" data-style="btn-default" data-width="100%" multiple>
 
-                            <select name ="hobby" class="selectpicker" multiple data-live-search="true">
+                                              {% for hobbys in hobby %}
 
-                                              {% for out_hobby in hobby %}
-                                  <option value="{{ out_hobby }}">{{ out_hobby }}</option>
+                                  <option value="{{ hobbys }}" >{{ hobbys }}</option>
+
                                               {% endfor %}
-
 
                             </select>
 
                         <!----------- Profile image-------->
 
-                               <label class="picture_label">Profile image:</label>
+
                                <label class="click_image">Choose file</label>
-                               <input type="file" name="img_file" class="click_image" id="hide_file" required/>
+                               <input type="file" name="image" class="click_image" id="hide_file" required/>
 
                         <!----------- Sign in Button -------->
 
 
-
-
                                  <input type="submit" class="btn btn-warning" id="register_button" value="Register"/>
-
-
-
+                                 <a href="{% url 'index' %}">
+                                   <button type="button" class="btn btn-primary">Back to main</button></a>
 
                      </form>
 

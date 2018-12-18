@@ -38,13 +38,14 @@ def hobbies(request):
     qdict = {
         'hobby': total
     }
+    print(total)
     return render(request, "socialApp/register.html", context=qdict)
 
  # register view, is called by the signup page and registers the user with the information entered on the html form
 def register(request):
-    condition = register
+    total = Hobby.objects.all()
     if  request.method =='POST':# Check if the request was POST
-        dict = validate(request, condition) # validate if data is all nice and clean and ready to go
+        dict = validate(request) # validate if data is all nice and clean and ready to go
         #dict{username, name, email, hobbies, dataofBirth, gender, image, }
         user = UserProfile(username=dict[0], name=dict[1], email=dict[2], dob=dict[4], gender=dict[5],image=dict[6])
         try:
@@ -55,23 +56,28 @@ def register(request):
                 user.hobbies.add(hobgob)
         except IntegrityError:
             return render(request, 'socialApp/register.html', {
-                'error_message': "Username " + request.POST['username'] + " already exists!"
+                'error_message': "Username " + request.POST['username'] + " already exists!",
+                'hobby': total
             })
         context = {
-            'registration': True
+            'registration': True,
+            'hobby': total
         }
-        return render(request, 'socialApp/index.html', context)
+        return render(request, 'socialApp/login.html', context)
+    return render(request, 'socialApp/register.html')
 
-def login(request):#is used to login the user
-    if not request.method == 'POST':
-        return render(request, 'socialApp/login.html')
+def login(request):
+    if not ('username' in request.POST and 'password' in request.POST):
+        return render(request,'socialApp/login.html')
     else:
         username = request.POST['username']
         password = request.POST['password']
         try:
             userProfile = UserProfile.objects.get(username=username)
         except UserProfile.DoesNotExist:
-            raise Http404('User does not exist')
+            return render(request,'socialApp/login.html',{
+             'error_message2': "Username Doesn't exist"
+             })
         if userProfile.check_password(password):
 
             request.session['username'] = username
@@ -80,17 +86,21 @@ def login(request):#is used to login the user
                 'username': username,
                 'loggedin': True
             }
-            response = render(request, 'socialApp/login.html', context)
+            response = render(request, 'socialApp/homepage.html', context)
             ## cookie most code from lab8
             now = dt.datetime.utcnow()
             max_age = 365 * 24 * 60 * 60  # one year
             delta = now + dt.timedelta(seconds=max_age)
             format = "%a, %d-%b-%Y %H:%M:%S GMT"
             expires = dt.datetime.strftime(delta, format)
-            response.set_cookie('last_login', now, expires=expires)
+            response.set_cookie('login', now, expires=expires)
+            #set a cookie
             return response
+            print("testoing")
         else:
-            raise Http404('Wrong password')
+            return render(request,'socialApp/login.html',{
+             'error_message': "Incorrect password, please try again."
+             })
 
 
 @loggedin#decorator that verifies the user is logged in. if he is, the following view can be called
@@ -99,18 +109,17 @@ def logout(request, user):  # view for logout/, flushes the session and logs out
     return render(request, 'socialApp/index.html')
 
 # validate all the fields passed in the request
-def validate(request, condition):
+def validate(request):
     u = request.POST['username']
     f = request.POST['name']
     e = request.POST['email']
     g = request.POST['gender']
     h = request.POST.getlist('hobby')
     d = request.POST['dob']
-    i = request.FILES.get('img_file',False)
-    dict = [u, f, e, h, d, g, i]  # creates an array containing all the fields
-    if condition == register:
-        p = request.POST['password']
-        dict.append(p)
+    i = request.FILES.get('image')
+    p = request.POST['password']
+    dict = [u, f, e, h, d, g, i, p]  # creates an array containing all the fields
+
     return dict
 
 @loggedin
@@ -123,19 +132,21 @@ def logout(request, user):
 @loggedin
 def profile(request, user):#view that will allow the user to edit his profile
     user1 = UserProfile.objects.filter(username=user)  # QuerySet object
-    condition = profile
+    print(user1)
     if request.POST:
-        dict = validate(request, condition)
+        dict = validate(request)
         print(dict)
-        user1.update(name=dict[1], email=dict[2], dob=dict[4])  # updates the name and email
-        user.hobbies.clear()  # clears hobby
+        user1.update(name=dict[1], email=dict[2], dob=dict[4], gender=dict[5])  # updates the name and
+
         for hobby in dict[3]:  # dict[4] is the list of hobbies
             hob, _ = Hobby.objects.get_or_create(name=hobby)
             user.hobbies.add(hob)
+        user.hobbies.clear()  # clears hobby
     total = Hobby.objects.all()  # Queryset, all the hobbies
     names = user1[0].hobbies.values_list('name', flat=True)
     names = list(names) ## get all hobies in list format
-
+    if(request.FILES.get('image')):
+        user.image = request.FILES['image']
     dict = {
         'loggedin': True,
         'email': user1[0].email,
@@ -149,18 +160,16 @@ def profile(request, user):#view that will allow the user to edit his profile
         'dob': user1[0].dob,
         'userhobbies': user1[0].hobbies.all(),
         'ownuserhobbies': names,
-        'testing': "['abc','lol']"
     }
-    print(names)
     return render(request, 'socialApp/profile.html', context=dict)
 
 @loggedin
 def homepage(request, user):# view of the homepage.
     members = UserProfile.objects.all()
-    members = excludematched(members, user)#excludes matched users from the list of users that will be presented to the logged in user
-    sort = sorting(members, user)#sorts the remaining list of users and saves it in sort.
+    #members = excludematched(members, user)#excludes matched users from the list of users that will be presented to the logged in user
+    #sort = sorting(members, user)#sorts the remaining list of users and saves it in sort.
     context = {
-        "members": sort, #passes the sorted list of users in the context
+        "members": "sort", #passes the sorted list of users in the context
         "loggedin":True
     }
     return render(request, 'socialApp/homepage.html', context)#renders the sorted list of users that the logged in user is not matched with.

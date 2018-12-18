@@ -37,8 +37,7 @@
                         <input type="text" name="username" id="uname" placeholder="{{username}}"  value="{{ username}}"  class="form-control last">
 
                         <label class="xname">DOB :</label>
-                    <input type="date" name="dob" id='dob' class="form-control" value="{{ dob|date:"Y-m-d" }}" >
-
+                    <input type="date" name="dob" id='dob' class="form-control" max="9999-12-31" value="{{ dob|date:"Y-m-d" }}"  >
 
                       <label class="mail">Email :</label>
                         <input type="email" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$]"  name="email" id="email" value={{email}} class="form-control">
@@ -49,39 +48,48 @@
 
 
                             {% if gender == 'F' %}
+
                             <input type="radio"  name="gender" id="gender" value="M" >Female</input>
                            <input type="radio"  name="gender" id="gender" value="F" checked>Female</input>
                             {%endif%}
 
-{% if gender == 'M' %}
+                            {% if gender == 'M' %}
                    <input type="radio"  name="gender" id="gender" value="M" checked>Male</input>
                    <input type="radio"  name="gender" id="gender" value="F">Female</input>
 
             {%endif%}
 
             <!----------- For Hobby-------->
-
+            <br>
                               <label class="hobby">Hobbies:</label>
 
                            <select name ="hobby" class="selectpicker" data-style="btn-default" data-width="100%" multiple>
 
                                              {% for hobbys in hobby %}
-                                 <option value="{{ hobbys }}" selected ="selected">{{ hobbys }}</option>
+                                 <option value="{{ hobbys }}" >{{ hobbys }}</option>
                                              {% endfor %}
 
                            </select>
-                           <u> Current Selected Hobbies </u>
 
-                           {% for hobby in ownuserhobbies %}
-                             <li>{{hobby}}</li>
-                           {% endfor %}
+                           <label for="password">Password:</label>
+                           <input type="password" name="password" id="password" class="form-control">
+                           <div>
+                           <label for="profilePicture">Profile Picture:</label>
+                           <input type="file" name="image" id='profilePicture' >
+                           </div>
 
                                  <input type="submit" value="Save Edit" class="btn btn-warning"/>
-                                 <a href="{% url 'login' %}">click here</a> to return back!
+                                   <a href="{% url 'homepage' %}">
+                                     <button type="button" class="btn btn-primary">Back to homepage</button>
+                  </
+<div>
+                                 <u> Current Selected Hobbies </u>
 
+                                 {% for hobby in ownuserhobbies %}
+                                   <li>{{hobby}}</li>
+                                 {% endfor %}
+                                 </div>
         </form>
-        {{ownuserhobbies}}
-        {{testing}}
 
 
     {% endblock %}

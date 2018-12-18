@@ -1,23 +1,21 @@
 {% extends "socialApp/base.html" %}
 
 {% block content %}
+{%if registration %}
 
+<p> Thanks for signing up yo! Login here to start browsing! </p>
+{% endif %}
+{% if error_message %}
+<p>
+  <strong>{{ error_message }}</strong>
+</p>
+{% endif %}
 
-
-            {% if loggedin %}
-            <h1 id="Sub_container_title">You are Logged in! </h1> <small><a href="{% url 'logout' %}">Click here</a> to logout!</small>
-
-		<form >
-
-            <button  style="width:150px" class="btn btn-success" formaction="{% url 'search' %}"> Search</button>
-            <br>
-            <p class="logged_p">Search for people here!</p>
-            <button  style="width:150px" class="btn btn-success" formaction="{% url 'profile' %}"> Profile</button>
-            <br>
-              <p class="logged_p">Access your profile here!</p>
-		</form>
-
-             {% else %}
+{% if error_message2 %}
+<p>
+  <strong>{{ error_message2 }}</strong>
+</p>
+{% endif %}
 
             <h1 id="Sub_container_title">Login </h1>
             <br>
@@ -28,9 +26,13 @@
                <br>
                <input type='submit' class="btn btn-warning" value='Login'/>
                <form method="get" action="/signup/">
-                   <a class="btn btn-primary" href="/signup">Signup</a>
+                 <a href="{% url 'signup' %}">
+                   <button type="button" class="btn btn-primary">Signup</button>
+</a>
+<a href="{% url 'index' %}">
+  <button type="button" class="btn btn-primary">Back to main</button>
+</a>
                </form>
            </form>
-            {% endif %}
 
 {% endblock %}
