@@ -134,14 +134,18 @@ def logout(request, user):
 def profile(request, user):#view that will allow the user to edit his profile
     user1 = UserProfile.objects.filter(username=user)  # QuerySet object
     if request.POST:
-        dict = validate(request)
-        user1.update(name=dict[1], email=dict[2], dob=dict[4], gender=dict[5])  # updates the name and
+        if(request.POST['name']):
+            user.name = request.POST['name']
+        if(request.POST['dob']):
+            user.dob = parse_date(request.POST['dob'])
+        if(request.POST['gender']):
+            user.gender = request.POST['gender']
         if (request.FILES.get('image')):
             user.image = request.FILES.get('image',False)
         if (request.POST['password']):
             user.set_password(request.POST['password'])
         user.hobbies.clear()  # clears hobby
-        for hobby in dict[3]:  # dict[3] is the list of hobbies
+        for hobby in request.POST.getlist('hobby'):  # dict[3] is the list of hobbies
             hob, _ = Hobby.objects.get_or_create(name=hobby)
             user.hobbies.add(hob)
     total = Hobby.objects.all()  # Queryset, all the hobbies
