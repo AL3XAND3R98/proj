@@ -1,0 +1,7 @@
+{% extends "socialApp/base.html" %}
+
+{% block content %}
+<span class='info'> Please login to proceed</span>
+
+
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends "SocialApp/base.html" %} {% load static %} {% block content %}
+
+<div class='main'>
+    <div class="welcome" id="welcome_heading">
+        <!-----Welcome Sentences---->
+    </div>
+    <!-----------Container-------->
+    <div class="container_profile">
+    <div class="sub_container_profile1">
+        <!-----------Profile Information-------->
+        <div class="row ">
+        <br>
+            <div class="col-sm-12">
+  <!-----------Profile Pic-------->
+               <form id='upload_form' method='POST'  enctype='multipart/form-data'>
+            {% csrf_token %}
+           <div class = col-xs-4>
+      <img id='profile-img' width=200 height=200 src={{image.url}}>
+
+            </div>
+             <input type="file" id="img_file" style="display:none;">
+
+            </form>
+            <!-----------Information-------->
+            <div class="col-xs-8" id="profile_information">
+                <h2 class="userprofile" align="left"> Name: {{ name }} </h2>
+                <h2 class="userprofile" align="left"> Age: {{age}} </h2>
+                <h2 class="userprofile" align="left"> Email: {{email}}</h2>
+                <h2 class="userprofile" align="left"> Username: {{username}} </h2>
+                <h2 class="userprofile" align="left"> Gender: {{gender}} </h2>
+            </div>
+            </div>
+
+        </div>
+</div>
+<!-----Edit Profile---->
+<div class="sub_container_profile2">
+
+        <form id='upload_form' method='POST' action="{% url 'profile' %}" enctype='multipart/form-data'>
+            {% csrf_token %}
+
+            <div class="row ">
+            <br><br>
+                <!--- For Name---->
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-xs-8">
+                          <label class="xname">Name :</label>
+                            <input type="text" name="name" id="name" "" value="{{name}}" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+            <!-----Username---->
+            <div class="col-sm-12">
+                <div class="hide">
+                <div class="row">
+                    <div class="col-xs-8">
+                      <label class="username">Username :</label>
+                        <input type="text" name="username" id="username" placeholder="{{username}}"  value="{{ username}}"  class="form-control last" required readonly>
+                    </div>
+                </div>
+                </div>
+            </div>
+                <!-----For dateofbirth---->
+            <div class="col-sm-12">
+               <div class="row">
+                  <div class="col-xs-8"   >
+                    <label class="age" >Date of Birth :</label>
+                     <input type="text" name ="dateOfBirth"  class="form-control"
+                     </div>
+                  </div>
+               </div>
+            <!-----email---->
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-xs-8">
+                      <label class="mail">Email :</label>
+                        <input type="email" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$]"  name="email" id="email" value={{email}} class="form-control">
+                    </div>
+                </div>
+            </div>
+
+            <!----------- For Gender-------->
+                <div class="col-sm-12">
+                    <div class="hide">
+                     <div class ="row">
+                        <div class="col-xs-4 ">
+                           <label class="gender">Gender:</label>
+                        </div>
+                        <div class="col-xs-4 male">
+                           <input type="radio" name="gender"  id="gender" value="M" checked>Male</input>
+                        </div>
+                        <div class="col-xs-4 female">
+                            {% if gender == 'F' %}
+                           <input type="radio"  name="gender" id="gender" value="F" checked>Female</input>
+                            {%endif%}
+                        </div>
+                     </div>
+                     </div>
+            <!----------- For Hobby-------->
+            <div class="col-sm-12"><br>
+                        <div class ="row">
+                           <div class="col-xs-4 ">
+                              <label class="hobby">Hobbies:</label>
+                           </div>
+                            <div class="col-xs-4 ">
+                           <select name ="hobby" id="option-group-edit" class="option-group-demo" multiple="multiple">
+                              <optgroup label="Hobbies">
+                                             {% for hobbys in hobby %}
+                                 <option value="{{ hobbys }}">{{ hobbys }}</option>
+                                             {% endfor %}
+                              </optgroup>
+
+                           </select>
+                                    </div>
+                           <div class="col-xs-4">
+                                 <input type="submit" value="Save Edit" class="btn btn-warning"/>
+                                 <a href="{% url 'login' %}">click here</a> to return back!
+
+                                    </div>
+                           </div>
+                        </div>
+        </form>
+         <!-----End form---->
+</div>
+
+        </div>
+
+    </div>
+    {% endblock %}
