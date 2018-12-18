@@ -105,12 +105,11 @@
                               <label class="hobby">Hobbies:</label>
                            </div>
                             <div class="col-xs-4 ">
-                           <select name ="hobby" id="option-group-edit" class="option-group-demo" multiple="multiple">
-                              <optgroup label="Hobbies">
+                           <select name ="hobby" class="selectpicker" multiple data-live-search="true">
+
                                              {% for hobbys in hobby %}
                                  <option value="{{ hobbys }}">{{ hobbys }}</option>
                                              {% endfor %}
-                              </optgroup>
 
                            </select>
                                     </div>

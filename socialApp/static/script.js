@@ -6,21 +6,10 @@ $(function() {
     });
 
 
-    $("#datepicker").datepicker({
-        dateFormat: 'yy-mm-dd',
-        changeMonth: true,
-        changeYear: true,
-        yearRange: "-100:-18",
-        maxDate: '-18y',
-    });
-
 
     $('.option-group-demo').multiselect({
         numberDisplayed: 1
-
-
     });
-
 
 
     function progressHandler(event) {
