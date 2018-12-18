@@ -1,6 +1,6 @@
 {% extends "SocialApp/base.html" %}
  {% block content %}
-
+{% load staticfiles %}
   <!-----------Profile Pic-------->
                <form id='upload_form' method='POST'  enctype='multipart/form-data'>
             {% csrf_token %}
@@ -33,10 +33,10 @@
                             <input type="text" name="name" id="name" value="{{name}}" class="form-control">
 
 
-
+                      <div class="hide">
                       <label class="username">Username :</label>
-                        <input type="text" name="username" id="uname" placeholder="{{username}}"  value="{{ username}}"  class="form-control last">
-
+                        <input type="text" name="username" id="uname" placeholder="{{username}}"  value="{{ username}}"  readonly="True" class="form-control last">
+                        </div>
                         <label class="xname">DOB :</label>
                     <input type="date" name="dob" id='dob' class="form-control" max="9999-12-31" value="{{ dob|date:"Y-m-d" }}"  >
 

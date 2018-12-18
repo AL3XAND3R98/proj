@@ -19,7 +19,7 @@ def loggedin(view):
             try:
                 user = UserProfile.objects.get(username=username)
             except UserProfile.DoesNotExist:
-                raise Http404('UserProfile does not exist')
+                raise Http404('UserProfile does not exist xD')
             return view(request, user)
         else:
             return render(request, 'socialApp/errorLogin.html', {})
@@ -148,6 +148,7 @@ def profile(request, user):#view that will allow the user to edit his profile
     names = user1[0].hobbies.values_list('name', flat=True)
     names = list(names) ## get all hobies in list format
     user.save()
+    user1 = UserProfile.objects.filter(username=user)
     dict = {
         'loggedin': True,
         'email': user1[0].email,
